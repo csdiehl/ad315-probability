@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller</title>
+</head>
+<body>
+    <div class="card">
+        <form id="dice-form">
+            <label for="dice">Number of dice</label>
+            <input value="6" step="1" name="dice" type="number"></input>
+
+            <label for="sides">Number of sides</label>
+            <input value="6" step="1" min="1" max="20" name="sides" type="number"></input>
+
+            <label for="rolls">Number of Rolls</label>
+            <input value="1" step="1" name="rolls" type="number"></input>
+
+            <button type="submit">Roll</button>
+        </form>
+        <h2 id="single-die-result" class="result"></h2>
+    </div>
+
+    <script>
+        function sumDiceOneRoll(m, n, k = 1) {
+            const results = [];
+
+            for (let i = 0; i < k; i++) {
+                for (let j = 0; j < m; j++) {
+                results.push(Math.floor(Math.random() * n) + 1); // Adding +1 to ensure the minimum roll is 1
+                }
+            }
+       
+            return results.reduce((acc, curr) => acc + curr, 0);
+        }
+
+        function calcProbability(dice, sides, rolls = 1) {
+            // list all possible outcomes
+            const outcomes = []
+            const min = dice;
+            const max = dice * sides;
+            for (let i = min; i <= max; i++) {
+                outcomes.push(i)
+            }
+
+            // find the number of ways those outcomes can happen
+            // could enumerate all the outcomes in a loop and store them in a map
+
+            // divide by the total number of outcomes (which is same as the max roll)
+
+            // https://www.analyticscheck.net/posts/sums-dice-rolls
+            // https://www.lucamoroni.it/the-dice-roll-sum-problem/
+            // https://medium.com/swlh/dice-roll-distributions-statistics-and-the-importance-of-runtime-efficiency-d8ce3402db15
+            
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("dice-form").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                const data = Object.fromEntries(formData);
+
+                const dice = parseInt(data.dice, 10);
+                const sides = parseInt(data.sides, 10);
+                const rolls = parseInt(data.rolls, 10);
+
+                if (!isNaN(dice) && !isNaN(sides)) {
+                    const result = sumDiceOneRoll(dice, sides, rolls);
+                    document.getElementById("single-die-result").innerHTML = result
+                } else {
+                    console.log("Please enter valid numbers for both fields.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

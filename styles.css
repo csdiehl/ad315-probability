@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+h1 {
+  margin: 16px auto;
+  color: #fff;
+}
+
+body {
+  background-color: #454545;
+}
+
+.card-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 8px;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.bar {
+  width: 300px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.filled {
+  background-color: steelblue;
+}
+
+#canvas {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn-set {
+  display: flex;
+}
+
+button {
+  background-color: #121212;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  margin: 8px 0;
+  padding: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(80%);
+}
+
+.reds-count,
+.blacks-count {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.red-dot {
+  width: 24px;
+  height: 24px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.black-dot {
+  width: 24px;
+  height: 24px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.stacked-bar {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background-color: #ccc;
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <div id="canvas">
+      <h1>Probability Experiments</h1>
+
+      <div class="card-wrapper">
+        <div class="card">
+          <h2>Toss a coin</h2>
+          <button onclick="coinExperiment()" class="coin-btn">Toss Coin</button>
+          <p id="heads-result">heads:</p>
+          <div id="heads-bar" class="bar filled"></div>
+          <p id="tails-result">tails:</p>
+          <div id="tails-bar" class="bar filled"></div>
+        </div>
+        <div class="card">
+          <h2>Roll a Die</h2>
+          <button onclick="rollAllDice()">Roll Die</button>
+          <p id="ones">ones:</p>
+          <div id="ones-bar" class="bar filled"></div>
+          <p id="twos">twos:</p>
+          <div id="twos-bar" class="bar filled"></div>
+          <p id="threes">threes:</p>
+          <div id="threes-bar" class="bar filled"></div>
+          <p id="fours">fours:</p>
+          <div id="fours-bar" class="bar filled"></div>
+          <p id="fives">fives:</p>
+          <div id="fives-bar" class="bar filled"></div>
+          <p id="sixes">sixes:</p>
+          <div id="sixes-bar" class="bar filled"></div>
+        </div>
+
+        <div class="card">
+          <h2>Draw a card</h2>
+          <button onclick="drawCards()">Draw Cards</button>
+          <p id="reds">reds:</p>
+          <div class="reds-count"></div>
+          <p id="blacks">blacks:</p>
+          <div class="blacks-count"></div>
+        </div>
+
+        <div class="card">
+          <h2>Toss two coins</h2>
+          <button onclick="compoundCoins()">Flip two cards</button>
+          <p id="both-heads">Both heads:</p>
+          <p id="one-head">At least 1 head:</p>
+          <div class="stacked-bar">
+            <div id="one-head-bar" class="bar filled"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script async defer>
+      const DICE_ROLLS = 60
+
+      function tossCoin() {
+        return Math.round(Math.random())
+      }
+
+      function tossManyCoins(n = 100) {
+        const results = []
+
+        for (let i = 0; i < n; i++) {
+          results.push(tossCoin())
+        }
+
+        return results.reduce((acc, curr) => acc + curr, 0)
+      }
+
+      function getAllTosses(n = 100) {
+        const results = []
+
+        for (let i = 0; i < n; i++) {
+          results.push(tossCoin())
+        }
+
+        return results
+      }
+
+      function coinExperiment() {
+        const sum = tossManyCoins()
+        const h = document.querySelector("#heads-result")
+        h.innerHTML = "heads: " + sum
+        const t = document.querySelector("#tails-result")
+        t.innerHTML = "tails: " + (100 - sum)
+
+        document.querySelector("#heads-bar").style.width = sum + "%"
+        document.querySelector("#tails-bar").style.width = 100 - sum + "%"
+      }
+
+      function rollDie() {
+        return Math.ceil(Math.random() * 6)
+      }
+
+      function fillBar(id, result, total = DICE_ROLLS) {
+        document.querySelector(id).style.width =
+          Math.round((result / total) * 100) + "%"
+      }
+
+      function rollAllDice() {
+        const results = {}
+
+        for (let i = 0; i < DICE_ROLLS; i++) {
+          const res = rollDie()
+          const key = res.toString()
+          if (key in results) {
+            results[key] += 1
+          } else {
+            results[key] = 1
+          }
+        }
+
+        document.querySelector("#ones").innerHTML = "ones: " + results["1"]
+        document.querySelector("#twos").innerHTML = "twos: " + results["2"]
+        document.querySelector("#threes").innerHTML = "threes: " + results["3"]
+        document.querySelector("#fours").innerHTML = "fours: " + results["4"]
+        document.querySelector("#fives").innerHTML = "fives: " + results["5"]
+        document.querySelector("#sixes").innerHTML = "sixes: " + results["6"]
+
+        fillBar("#ones-bar", results["1"])
+        fillBar("#twos-bar", results["2"])
+        fillBar("#threes-bar", results["3"])
+        fillBar("#fours-bar", results["4"])
+        fillBar("#fives-bar", results["5"])
+        fillBar("#sixes-bar", results["6"])
+      }
+
+      function drawCards() {
+        const sum = tossManyCoins(20)
+        const h = document.querySelector("#reds")
+        h.innerHTML = "reds: " + sum
+        const t = document.querySelector("#blacks")
+        t.innerHTML = "blacks: " + (20 - sum)
+
+        const redCount = document.querySelector(".reds-count")
+        redCount.innerHTML = ""
+        for (let i = 0; i < sum; i++) {
+          const dot = document.createElement("div")
+          dot.className = "red-dot"
+          redCount.appendChild(dot)
+        }
+
+        const blackCount = document.querySelector(".blacks-count")
+        blackCount.innerHTML = ""
+        for (let i = 0; i < 20 - sum; i++) {
+          const dot = document.createElement("div")
+          dot.className = "black-dot"
+          blackCount.appendChild(dot)
+        }
+      }
+
+      function compoundCoins() {
+        const results = { "both heads": 0, "one head": 0 }
+        const coinA = getAllTosses(50)
+        const coinB = getAllTosses(50)
+
+        coinA.forEach((resultA, i) => {
+          const resultB = coinB[i]
+
+          if ((resultA === 1) | (resultB === 1)) {
+            results["one head"] += 1
+            if (resultA === 1 && resultB === 1) {
+              results["both heads"] += 1
+            }
+          }
+        })
+
+        document.querySelector("#both-heads").innerHTML =
+          "Both heads: " + results["both heads"]
+        document.querySelector("#one-head").innerHTML =
+          "At least one head: " + results["one head"]
+
+        fillBar("#one-head-bar", results["one head"], 50)
+      }
+
+      // initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        coinExperiment()
+        rollAllDice()
+        drawCards()
+        compoundCoins()
+      })
+    </script>
+  </body>
+</html>
