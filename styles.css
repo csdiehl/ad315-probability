@@ -101,3 +101,41 @@ table {
 td, th {
   padding: 2px;
 }
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #ccc;
+  max-width: 200px;
+  font-size: 1.5rem;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#dice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#dice-form button {
+  max-width: 200px;
+}
+
+.result {
+  font-size: 8rem;
+  line-height: 8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+#dice-card {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
