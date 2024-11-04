@@ -4,22 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dice Roller</title>
+        <link rel="stylesheet" href="./styles.css" />
+
 </head>
 <body>
     <div class="card">
         <form id="dice-form">
             <label for="dice">Number of dice</label>
-            <input value="6" step="1" name="dice" type="number"></input>
+            <input value="3" step="1" min="1" max="9" name="dice" type="number"></input>
 
             <label for="sides">Number of sides</label>
-            <input value="6" step="1" min="1" max="20" name="sides" type="number"></input>
+            <input min="1" max="20" value="6" step="1" min="1" max="20" name="sides" type="number"></input>
 
             <label for="rolls">Number of Rolls</label>
             <input value="1" step="1" name="rolls" type="number"></input>
 
             <button type="submit">Roll</button>
         </form>
+        <p>Simulated Outcome</p>
         <h2 id="single-die-result" class="result"></h2>
+        <h2>Probability of possible dice results for one roll</h2>
+        <table id="graph">
+            <tbody id="table-body">
+            <tr>
+                <th>Outcome</th>
+                <th>Count</th>
+                <th> </th>
+            </tr>
+
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -37,22 +51,80 @@
 
         function calcProbability(dice, sides, rolls = 1) {
             // list all possible outcomes
-            const outcomes = []
+            const outcomes = new Map()
             const min = dice;
             const max = dice * sides;
-            for (let i = min; i <= max; i++) {
-                outcomes.push(i)
+            const options = []
+
+            for (let i = 0; i < dice; i++) {
+                const dieOptions = []
+                for (let j = 1; j <= sides; j++) {
+                    dieOptions.push(j)
+                }
+                options.push(dieOptions)
             }
-
+         
             // find the number of ways those outcomes can happen
+            const combos = product(...options)
             // could enumerate all the outcomes in a loop and store them in a map
+            for (let combo of combos) {
+                const sum = combo.reduce((a,b) => a + b, 0)
+                if (outcomes.has(sum)) {
+                    curr = outcomes.get(sum)
+                    // divide by the total number of outcomes - can find using combination formula
+                    const chance = (curr + 1)
+                    outcomes.set(sum, chance)
+                } else {
+                    outcomes.set(sum, 1)
+                }
+            }        
 
-            // divide by the total number of outcomes (which is same as the max roll)
-
-            // https://www.analyticscheck.net/posts/sums-dice-rolls
-            // https://www.lucamoroni.it/the-dice-roll-sum-problem/
-            // https://medium.com/swlh/dice-roll-distributions-statistics-and-the-importance-of-runtime-efficiency-d8ce3402db15
+            return outcomes
             
+        }
+
+        function product(...iterable) {
+            if (iterable.length === 0) {
+                return [[]]
+            }
+            const [first, ...rest] = iterable
+            const remainingProduct = product(...rest)
+
+            return first.flatMap(item => remainingProduct.map(combo => [item, ...combo]))
+        }
+
+        function graphDistribution(resultMap) {
+            let total = 0
+            resultMap.entries().forEach(item => total += item[1])
+
+            // clear existing table
+            const table = document.querySelector("#table-body")
+            table.innerHTML = ""
+
+            resultMap.entries().forEach((item) => {
+                const [dieValue, count] = item
+                const chance = ((count / total) * 100).toFixed(2) 
+                const row = document.createElement("tr")
+                table.appendChild(row)
+                
+                const td1 = document.createElement("td")
+                td1.textContent = dieValue
+                row.appendChild(td1)
+
+                const td2 = document.createElement("td")
+                td2.textContent = chance + "%"
+                row.appendChild(td2)
+
+                const cell = document.createElement("td")
+                cell.style.width = "100%"
+                const bar = document.createElement("div")
+                cell.appendChild(bar)
+                bar.className = "bar filled"
+                bar.style.width = `${chance}%`
+                row.appendChild(cell)
+
+            })
+
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -66,6 +138,9 @@
                 const dice = parseInt(data.dice, 10);
                 const sides = parseInt(data.sides, 10);
                 const rolls = parseInt(data.rolls, 10);
+
+                const prob = calcProbability(dice, sides, rolls)
+                graphDistribution(prob)
 
                 if (!isNaN(dice) && !isNaN(sides)) {
                     const result = sumDiceOneRoll(dice, sides, rolls);

@@ -93,3 +93,11 @@ button:hover {
   height: 24px;
   background-color: #ccc;
 }
+
+table {
+  padding: 8px;
+}
+
+td, th {
+  padding: 2px;
+}
