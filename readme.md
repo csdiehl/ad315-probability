@@ -6,13 +6,13 @@ This repo contains two projects - probability experiments and n-sided dice. Open
 
 **File: ** `index.html`
 
-**Video: **
+**Video: ** https://youtu.be/PQuyl6kEFYo
 
 ## N-Sided Dice
 
 **File: ** `dice.html`
 
-**Video: **
+**Video: ** https://youtu.be/REfZEo0ARsc
 
 
 ## Extra Credit
