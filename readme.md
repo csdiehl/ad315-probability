@@ -4,15 +4,15 @@ This repo contains two projects - probability experiments and n-sided dice. Open
 
 ## Probability Experiments
 
-**File: ** `index.html`
+**File:** `index.html`
 
-**Video: ** https://youtu.be/PQuyl6kEFYo
+**Video:** https://youtu.be/PQuyl6kEFYo
 
 ## N-Sided Dice
 
-**File: ** `dice.html`
+**File:** `dice.html`
 
-**Video: ** https://youtu.be/REfZEo0ARsc
+**Video:** https://youtu.be/REfZEo0ARsc
 
 
 ## Extra Credit
